@@ -141,3 +141,24 @@ func (service *ProductService) Update(ctx context.Context, pId string) (resp str
 	}
 	return "更新商品成功", nil
 }
+
+func (service *ProductService) Delete(ctx context.Context, pId string) (resp string, err error) {
+	productDao := dao.NewProductDao(ctx)
+	productId, _ := strconv.Atoi(pId)
+	err = productDao.DeleteProductById(uint(productId))
+
+	if err != nil {
+		err = errors.New("删除商品失败")
+		return
+	}
+	return "删除商品成功", nil
+}
+func (service *ProductService) Search(ctx context.Context) (resp interface{}, total int, err error) {
+	productDao := dao.NewProductDao(ctx)
+	searchProduct, err := productDao.SearchProductByKeyWord(service.Info, service.PageNum, service.PageSize)
+	if err != nil {
+		err = errors.New("搜索商品失败")
+		return
+	}
+	return searchProduct, len(searchProduct), nil
+}

@@ -44,3 +44,17 @@ func (dao *ProductDao) ListProductByCondition(condition map[string]interface{}, 
 func (dao *ProductDao) UpdateProductById(pId uint, newProduct *model.Product) error {
 	return dao.DB.Model(&model.Product{}).Where("product_id=?", pId).Updates(&newProduct).Error
 }
+
+// DeleteProductById 删除商品
+func (dao *ProductDao) DeleteProductById(pId uint) error {
+	return dao.DB.Model(&model.Product{}).Delete(&model.Product{ID: pId}).Error
+}
+
+// SearchProductByKeyWord 通过关键词搜索商品
+func (dao *ProductDao) SearchProductByKeyWord(info string, pageNum, pageSize int) (products []*model.Product, err error) {
+	err = dao.DB.Model(&model.Product{}).
+		Where("name LIKE ? OR info LIKE ?", "%"+info+"%", "%"+info+"%").
+		Offset((pageNum - 1) * pageSize).
+		Limit(pageSize).Find(&products).Error
+	return
+}

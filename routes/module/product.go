@@ -12,5 +12,7 @@ func LoadProductRoute(v1 *gin.RouterGroup) {
 	product.POST("create", api.CreateProductHandler)
 	product.GET("list", api.ProductListHandler)
 	product.PUT("/update/:productId", api.ProductUpdateHandler)
+	product.DELETE("/delete/:productId", api.ProductDeleteHandler)
+	product.POST("/search", api.ProductSearchHandler)
 
 }

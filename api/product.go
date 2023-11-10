@@ -48,7 +48,6 @@ func ProductListHandler(ctx *gin.Context) {
 }
 
 func ProductUpdateHandler(ctx *gin.Context) {
-	
 	productId := ctx.Param("productId")
 	updateProductService := services.ProductService{}
 	if err := ctx.ShouldBind(&updateProductService); err != nil {
@@ -60,6 +59,30 @@ func ProductUpdateHandler(ctx *gin.Context) {
 			ctx.JSON(http.StatusInternalServerError, format.RespErrorWithData(respErr))
 		} else {
 			ctx.JSON(http.StatusOK, format.RespSuccessWithData(resp))
+		}
+	}
+}
+func ProductDeleteHandler(ctx *gin.Context) {
+	deleteProductService := services.ProductService{}
+	resp, respErr := deleteProductService.Delete(ctx.Request.Context(), ctx.Param("productId"))
+	if respErr != nil {
+		ctx.JSON(http.StatusInternalServerError, format.RespErrorWithData(respErr))
+	} else {
+		ctx.JSON(http.StatusOK, format.RespSuccessWithData(resp))
+	}
+}
+
+func ProductSearchHandler(ctx *gin.Context) {
+	searchProductService := services.ProductService{}
+	if err := ctx.ShouldBind(&searchProductService); err != nil {
+		msg := utils.GetValidMsg(err, &searchProductService)
+		ctx.JSON(http.StatusBadRequest, format.RespErrorWithData(errors.New(msg)))
+	} else {
+		resp, total, respErr := searchProductService.Search(ctx.Request.Context())
+		if respErr != nil {
+			ctx.JSON(http.StatusInternalServerError, format.RespErrorWithData(respErr))
+		} else {
+			ctx.JSON(http.StatusOK, format.RespListWithData(resp, int64(total)))
 		}
 	}
 }
