@@ -18,6 +18,7 @@ func migration() {
 		&model.Category{},
 		&model.Product{},
 		&model.ProductImg{},
+		&model.Collect{},
 	)
 
 	if err != nil {

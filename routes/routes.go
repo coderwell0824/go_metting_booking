@@ -40,6 +40,7 @@ func NewRouter() *gin.Engine {
 	module.LoadStatisticsRoute(authed)
 	module.LoadCategoriesRoute(authed)
 	module.LoadProductRoute(authed)
+	module.LoadCollectRoute(authed)
 
 	return r
 }
